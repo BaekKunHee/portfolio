@@ -12,16 +12,33 @@ const NotionRenderer = ({ blocks }: NotionRendererProps) => {
         case 'paragraph':
           return (
             <p key={block.id} className="text-black mb-4">
-              {block.paragraph?.rich_text?.map((text: any, index: number) => (
-                <span
-                  key={index}
-                  className={`${text.annotations?.bold ? 'font-bold' : ''} 
-                             ${text.annotations?.italic ? 'italic' : ''} 
-                             ${text.annotations?.underline ? 'underline' : ''}`}
-                >
-                  {text.plain_text}
-                </span>
-              )) || ''}
+              {block.paragraph?.rich_text?.map((text: any, index: number) =>
+                text.href ? (
+                  <a
+                    key={index}
+                    href={text.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={`text-blue-600 hover:underline
+                      ${text.annotations?.bold ? 'font-bold' : ''} 
+                      ${text.annotations?.italic ? 'italic' : ''} 
+                      ${text.annotations?.underline ? 'underline' : ''}`}
+                  >
+                    {text.plain_text}
+                  </a>
+                ) : (
+                  <span
+                    key={index}
+                    className={`${text.annotations?.bold ? 'font-bold' : ''} 
+                               ${text.annotations?.italic ? 'italic' : ''} 
+                               ${
+                                 text.annotations?.underline ? 'underline' : ''
+                               }`}
+                  >
+                    {text.plain_text}
+                  </span>
+                )
+              ) || ''}
             </p>
           );
 

@@ -144,7 +144,7 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
           </div>
         </div>
 
-        <div className="h-[calc(100%-160px)] md:h-[calc(100%-140px)] overflow-y-auto bg-white">
+        <div className="h-[calc(100%-200px)] md:h-[calc(100%-180px)] overflow-y-auto bg-white">
           <div className="p-6 md:pb-20">
             {loading ? (
               <div className="flex items-center justify-center h-full">
