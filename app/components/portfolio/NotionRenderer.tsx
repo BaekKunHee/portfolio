@@ -63,11 +63,20 @@ const NotionRenderer = ({ blocks }: NotionRendererProps) => {
 
         case 'bulleted_list_item':
           return (
-            <li key={block.id} className="text-black ml-4 mb-2">
-              {block.bulleted_list_item?.rich_text
-                ?.map((text: any) => text.plain_text)
-                .join('') || ''}
-            </li>
+            <div key={block.id} className="mb-2">
+              <li className="text-black ml-4">
+                {block.bulleted_list_item?.rich_text
+                  ?.map((text: any) => text.plain_text)
+                  .join('') || ''}
+              </li>
+              {block.has_children && block.children && (
+                <ul className="ml-8">
+                  {block.children.map((child: NotionBlock) =>
+                    renderBlock(child)
+                  )}
+                </ul>
+              )}
+            </div>
           );
 
         case 'numbered_list_item':
@@ -79,6 +88,20 @@ const NotionRenderer = ({ blocks }: NotionRendererProps) => {
             </li>
           );
 
+        case 'column_list':
+          return (
+            <div key={block.id} className="flex flex-col md:flex-row gap-4">
+              {block.children?.map((child: NotionBlock) => renderBlock(child))}
+            </div>
+          );
+
+        case 'column':
+          return (
+            <div key={block.id} className="flex-1">
+              {block.children?.map((child: NotionBlock) => renderBlock(child))}
+            </div>
+          );
+
         case 'image':
           const imageUrl = block.image?.file?.url || block.image?.external?.url;
           return imageUrl ? (
@@ -86,8 +109,16 @@ const NotionRenderer = ({ blocks }: NotionRendererProps) => {
               <img
                 src={imageUrl}
                 alt="Content"
-                className="max-w-full rounded-lg"
+                className="w-full h-auto rounded-lg object-contain"
+                loading="lazy"
               />
+              {block.image.caption?.length > 0 && (
+                <p className="text-sm text-gray-500 mt-2">
+                  {block.image.caption
+                    .map((cap: any) => cap.plain_text)
+                    .join('')}
+                </p>
+              )}
             </div>
           ) : null;
 
@@ -114,7 +145,7 @@ const NotionRenderer = ({ blocks }: NotionRendererProps) => {
               {block.callout?.icon?.type === 'emoji' && (
                 <div className="mr-4 text-xl">{block.callout.icon.emoji}</div>
               )}
-              <div className="text-black">
+              <div className="text-black whitespace-pre-wrap">
                 {block.callout?.rich_text?.map((text: any, index: number) => (
                   <span
                     key={index}
