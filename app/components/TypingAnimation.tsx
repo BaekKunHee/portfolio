@@ -37,7 +37,7 @@ export default function TypingAnimation({
           </h1>
           <TypeAnimation
             sequence={[
-              '비즈니스를 이해하고, 성장의 기회를 코드로 만드는 개발자, 백건희입니다.',
+              '비즈니스의 본질을 이해하고, 기술로 가치를 창출하는 문제 해결사, 백건희입니다.',
               1000,
             ]}
             wrapper="span"
