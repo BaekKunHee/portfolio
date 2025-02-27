@@ -76,16 +76,16 @@ export const learnMoreItems: LearnMoreItem[] = [
   {
     icon: '/assets/icons/link.svg',
     text: 'Bio Link',
-    url: 'https://bit.ly/m/han_baek',
+    url: 'https://bit.ly/m/developer_bear',
   },
   {
     icon: '/assets/icons/notion.svg',
     text: 'Notion',
-    url: 'https://www.notion.so/baek-kun-hee-123456',
+    url: 'https://han-baek.notion.site/HAN-Product-Hacker-21c7a57f96cb414fb69347aeeeb06f72?pvs=74',
   },
   {
     icon: '/assets/icons/medium.svg',
-    text: 'Resume',
-    url: 'https://han-baek.notion.site/Han-Baek-Problem-Solver-18fca87a5280804a8765dbc6aac4a7c1?pvs=4',
+    text: 'TBD',
+    url: '#',
   },
 ];
