@@ -18,21 +18,21 @@ export interface SkillSets {
 
 export const badges = {
   one: [
-    '🤖 AI리터러시',
-    '💡 문제 해결 중심 개발',
-    '📊 데이터 기반',
-    '🔄 지속적인 개선 & 실험',
-    '🚀 비즈니스 성장',
-    '🎯 전략적 사고 & 효율성',
+    '🤖 AI & Automation Utilization',
+    '💡 Product Design for Problem Solving',
+    '📊 Data-Driven Growth Hacking',
+    '⚡ Iterative Experimentation & Optimization',
+    '🔥 Rapid MVP Development & Testing',
+    '🧠 Data-Driven Decision Making',
   ],
   two: [
-    '🔗 Connecting the dots',
-    '💪 높은 회복탄력성',
-    '💻 빠른 피드백 수용',
-    '🔥 묵묵하고 꾸준하게',
-    '👀 겸손과 메타인지',
-    '🚀 균형있는 고민과 행동',
-    '🤝 협업 중심 커뮤니케이션',
+    '🚀 Fast Experimentation & Growth-Driven Development',
+    '🏗 Lean & Agile Development',
+    '🤝 Teamwork & Cross-functional Collaboration',
+    '🎯 Focus on Core Problems',
+    '🔍 First-Principles Thinking',
+    '🛠 End-to-End Ownership',
+    '🔄 Continuous Learning & Adaptation',
   ],
 };
 

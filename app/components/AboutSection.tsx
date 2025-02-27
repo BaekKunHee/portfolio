@@ -108,13 +108,12 @@ const AboutSection = () => {
             className="bg-[#2A2A2A] p-6 rounded-lg"
           >
             <h3 className="text-lg font-semibold mb-3 text-[#f5f5f5]">
-              📌 비즈니스 중심 개발
+              📌 Business-Driven Development
             </h3>
             <ul className="space-y-2 text-sm text-gray-300">
               <li>
-                개발을 할 때 단순히 &ldquo;이 기능이 필요하다&rdquo;가 아니라
-                &ldquo;이 기능이 비즈니스에 어떤 영향을 줄 것인가?&rdquo;를 먼저
-                생각합니다.
+                &ldquo;이 기능이 필요하다&rdquo;가 아니라 &ldquo;이 기능이
+                비즈니스에 어떤 영향을 줄 것인가?&rdquo;를 먼저 생각합니다.
               </li>
               <br />
               <li>
@@ -123,8 +122,8 @@ const AboutSection = () => {
               </li>
               <br />
               <li>
-                단순한 감이 아닌 데이터와 사용자 피드백을 기반으로 제품의 성과를
-                측정하고 최적의 결정을 내립니다.
+                데이터와 사용자 피드백을 기반으로 제품 성과를 측정하고, 최적의
+                결정을 내리는 것이 핵심 원칙입니다.
               </li>
             </ul>
           </motion.div>
@@ -135,23 +134,22 @@ const AboutSection = () => {
             className="bg-[#2A2A2A] p-6 rounded-lg"
           >
             <h3 className="text-lg font-semibold mb-3 text-[#f5f5f5]">
-              ⚙️ 업무 방식
+              ⚙️ Work Methodology
             </h3>
             <ul className="space-y-2 text-sm text-gray-300">
               <li>
-                고객 중심 사고 - 제품을 개발할 때 내가 원하는 것이 아닌, 고객이
-                필요로 하는 것을 만듭니다.
+                Data-Driven Decision Making → 감이 아닌 데이터 기반으로 문제를
+                해결
               </li>
               <br />
               <li>
-                협업 중심 커뮤니케이션 - 트레이드오프(Trade-off) 관점에서
-                팀원들과 느슨하지만 긴밀하게 협업하여 최적의 의사결정을
-                내립니다.
+                Trade-offs & Collaboration → 팀원들과 긴밀히 협력하여 최적의
+                의사결정
               </li>
               <br />
               <li>
-                지속 가능한 개발 - 단기적인 결과뿐만 아니라, 장기적으로
-                유지보수하기 쉬운 코드와 구조를 고민합니다.
+                Sustainable Development → 단기 성과가 아닌, 장기적으로
+                유지보수하기 쉬운 코드와 구조 설계
               </li>
             </ul>
           </motion.div>
@@ -162,12 +160,12 @@ const AboutSection = () => {
             className="bg-[#2A2A2A] p-6 rounded-lg"
           >
             <h3 className="text-lg font-semibold mb-3 text-[#f5f5f5]">
-              🛠️ 프레임워크
+              🛠️ Framework & Mindset
             </h3>
             <ul className="space-y-2 text-sm text-gray-300">
               <li>
-                Agile - 빠르게 변화하는 비즈니스 요구에 맞춰 짧은 주기의 반복적
-                개발을 통해 효율적으로 제품을 개선합니다.
+                Agile & Lean Development → 빠르게 변화하는 시장에 맞춰 짧은
+                주기의 반복적 개발로 효율성을 극대화
               </li>
               <br />
               <li>
@@ -188,22 +186,22 @@ const AboutSection = () => {
             className="bg-[#2A2A2A] p-6 rounded-lg"
           >
             <h3 className="text-lg font-semibold mb-3 text-[#f5f5f5]">
-              🚀 비즈니스 임팩트
+              🚀 Business Impact
             </h3>
             <ul className="space-y-2 text-sm text-gray-300">
               <li>
-                UX 개선으로 전환율 20% 증가 - 기능 하나 바꾼 게 아니라, 사용자
-                흐름을 분석하고 최적화한 결과
+                UX 개선으로 전환율 20% 증가 → 단순한 기능 추가가 아니라, 사용자
+                흐름 최적화
               </li>
               <br />
               <li>
-                서비스 페이지 속도 50% 개선 - 프론트엔드 최적화(CDN 활용, 코드
-                스플리팅)와 백엔드 캐싱 전략을 적용하여 로딩 속도를 단축.
+                서비스 페이지 속도 50% 향상 → 프론트엔드 최적화(CDN, 코드
+                스플리팅) + 백엔드 개선
               </li>
               <br />
               <li>
-                자동화 도입으로 운영 비용 30% 절감 - 반복적인 수작업을
-                자동화하여 개발 및 운영의 효율성을 높이고, 비용을 절감했습니다.
+                자동화 도입으로 운영 비용 30% 절감 → 반복적인 수작업을
+                자동화하여 비용 절감 & 생산성 향상
               </li>
             </ul>
           </motion.div>

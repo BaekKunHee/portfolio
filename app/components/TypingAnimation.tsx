@@ -21,7 +21,7 @@ export default function TypingAnimation({
     >
       {!showProfile && (
         <TypeAnimation
-          sequence={['A Business-driven Developer.', 2000]}
+          sequence={['A Growth-focused Product Hacker.', 2000]}
           wrapper="span"
           speed={40}
           cursor={false}
@@ -33,11 +33,11 @@ export default function TypingAnimation({
       {showProfile && (
         <div className="flex flex-col items-center justify-center">
           <h1 className="text-3xl sm:text-3xl md:text-6xl font-extrabold transition-all duration-2000 text-white animate-fade-in">
-            A Business-driven Developer.
+            A Growth-focused Product Hacker.
           </h1>
           <TypeAnimation
             sequence={[
-              '비즈니스의 본질을 이해하고, 기술로 가치를 창출하는 문제 해결사, 백건희입니다.',
+              '비즈니스 성장을 주도하고, 빠른 실험과 기술로 혁신을 만들어가는 프로덕트해커, 백건희입니다.',
               1000,
             ]}
             wrapper="span"
