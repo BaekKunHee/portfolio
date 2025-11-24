@@ -5,6 +5,9 @@ import { ScrollControls } from "@react-three/drei";
 import { Suspense } from "react";
 import StarField from "./StarField";
 import Timeline from "./Timeline";
+import IntroSection from "./IntroSection";
+import ProfileSection from "./ProfileSection";
+import SkillSection from "./SkillSection";
 import { Project } from "@/app/types/portfolio";
 
 interface SceneProps {
@@ -23,9 +26,12 @@ export default function Scene({ portfolioItems, onProjectSelect }: SceneProps) {
         <directionalLight position={[0, 0, 5]} intensity={1} />
 
         <Suspense fallback={null}>
-          <ScrollControls pages={5} damping={0.3}>
+          <ScrollControls pages={6} damping={0.3}>
             <StarField />
+            <IntroSection />
+            <ProfileSection />
             <Timeline items={portfolioItems} onSelect={onProjectSelect} />
+            <SkillSection />
           </ScrollControls>
         </Suspense>
       </Canvas>
