@@ -1,136 +1,78 @@
-'use client';
+"use client";
 
-import { useCallback, useEffect, useState } from 'react';
-import AboutSection from './components/AboutSection';
-import BackgroundOverlay from './components/BackgroundOverlay';
-import FloatingMenu from './components/FloatingMenu';
-import PortfolioSection from './components/PortfolioSection';
-import ProfileSection from './components/ProfileSection';
-import ThankYouSection from './components/ThankYouSection';
-import TypingAnimation from './components/TypingAnimation';
-import { badges } from './data/aboutData';
-import { useAnimationState } from './hooks/useAnimationState';
+import { useEffect, useState } from "react";
+import { AnimatePresence } from "framer-motion";
+import dynamic from "next/dynamic";
+import ProjectModal from "./components/portfolio/ProjectModal";
+import { Project } from "./types/portfolio";
 
-const Badge = ({ label }: { label: string }) => (
-  <div className="inline-flex items-center bg-[#2D2D2D] rounded-full px-4 py-2 text-sm whitespace-nowrap text-white">
-    <span>{label}</span>
-  </div>
-);
+const Scene = dynamic(() => import("./components/3d/Scene"), { ssr: false });
 
 export default function Home() {
-  const [currentSection, setCurrentSection] = useState(0);
-  const { isAnimationComplete, showProfile, setShowPortfolio } =
-    useAnimationState();
-  const [, setIsModalOpen] = useState(false);
+  const [portfolioItems, setPortfolioItems] = useState<Project[]>([]);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  // 현재 섹션 추적
   useEffect(() => {
-    const handleScroll = () => {
-      const sections = [0, 1, 2, 3];
-      const scrollPosition = window.scrollY + window.innerHeight / 2;
-
-      for (const section of sections) {
-        const element = document.getElementById(`section-${section}`);
-        if (!element) continue;
-
-        const { offsetTop, offsetHeight } = element;
-        if (
-          scrollPosition >= offsetTop &&
-          scrollPosition < offsetTop + offsetHeight
-        ) {
-          setCurrentSection(section);
-          if (section > 0) {
-            setShowPortfolio(true);
-          }
-          break;
+    const fetchPortfolioItems = async () => {
+      try {
+        const response = await fetch("/api/notion");
+        const data = await response.json();
+        if (data.portfolioItems) {
+          const sortedItems = data.portfolioItems.sort(
+            (a: Project, b: Project) => {
+              if (!a.period || !b.period) return 0;
+              return b.period.localeCompare(a.period);
+            }
+          );
+          setPortfolioItems(sortedItems);
         }
+      } catch (error) {
+        console.error("Failed to fetch portfolio items:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [setShowPortfolio]);
-
-  // 메뉴 클릭 시 해당 섹션으로 스크롤
-  const handleScrollToSection = useCallback((sectionIndex: number) => {
-    const element = document.getElementById(`section-${sectionIndex}`);
-    element?.scrollIntoView({ behavior: 'smooth' });
+    fetchPortfolioItems();
   }, []);
 
   return (
-    <>
-      {showProfile && (
-        <FloatingMenu
-          onScrollToTop={() => handleScrollToSection(0)}
-          currentSection={currentSection}
-          onSectionClick={handleScrollToSection}
-        />
-      )}
-      <main className="relative w-full">
-        {/* 메인 섹션 */}
-        <section
-          id="section-0"
-          className="relative w-full h-screen flex items-center justify-center overflow-hidden bg-[#F5F5F5]"
-        >
-          <BackgroundOverlay isAnimationComplete={isAnimationComplete} />
-          <div className="flex flex-col items-center">
-            <TypingAnimation
-              isAnimationComplete={isAnimationComplete}
-              showProfile={showProfile}
-            />
-            {showProfile && (
-              <div className="flex flex-col justify-center items-center z-10 max-w-[920px] overflow-hidden relative bottom-36">
-                <div className="w-full h-[40px] overflow-hidden relative flex justify-start">
-                  <div className="flex gap-2 animate-slide-left whitespace-nowrap">
-                    {badges.one.map((label, i) => (
-                      <Badge key={`first-${i}`} label={label} />
-                    ))}
-                    {badges.one.map((label, i) => (
-                      <Badge key={`first-duplicate-${i}`} label={label} />
-                    ))}
-                  </div>
-                </div>
-
-                <div className="w-full h-[40px] overflow-hidden relative mt-2 flex justify-start">
-                  <div className="flex gap-2 animate-slide-right whitespace-nowrap">
-                    {badges.two.map((label, i) => (
-                      <Badge key={`second-${i}`} label={label} />
-                    ))}
-                    {badges.two.map((label, i) => (
-                      <Badge key={`second-duplicate-${i}`} label={label} />
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-            <ProfileSection showProfile={showProfile} />
+    <main className="relative w-full min-h-screen bg-transparent text-white pointer-events-none">
+      {loading ? (
+        <div className="absolute inset-0 flex items-center justify-center z-50">
+          <div className="text-2xl font-light tracking-widest animate-pulse">
+            CONNECTING THE DOTS...
           </div>
-        </section>
+        </div>
+      ) : (
+        <>
+          <div className="absolute top-8 left-8 z-10 pointer-events-none">
+            <h1 className="text-4xl font-bold tracking-tighter">HAN</h1>
+            <p className="text-sm text-gray-400 mt-2 tracking-widest">
+              PRODUCT HACKER
+            </p>
+          </div>
 
-        {/* About Section */}
-        <section
-          id="section-1"
-          className="relative w-full min-h-screen bg-[#1C1B1B] text-[#F5F5F5]"
-        >
-          <AboutSection />
-        </section>
+          <div className="absolute bottom-8 right-8 z-10 pointer-events-none text-right">
+            <p className="text-xs text-gray-500">SCROLL TO EXPLORE</p>
+          </div>
 
-        {/* 포트폴리오 섹션 */}
-        <section
-          id="section-2"
-          className="relative w-full min-h-screen bg-[#1C1B1B] text-[#F5F5F5]"
-        >
-          <PortfolioSection onModalChange={setIsModalOpen} />
-        </section>
+          <Scene
+            portfolioItems={portfolioItems}
+            onProjectSelect={setSelectedProject}
+          />
 
-        {/* Thank You 섹션 */}
-        <section
-          id="section-3"
-          className="relative w-full min-h-screen text-[#F5F5F5]"
-        >
-          <ThankYouSection />
-        </section>
-      </main>
-    </>
+          <AnimatePresence>
+            {selectedProject && (
+              <ProjectModal
+                project={selectedProject}
+                onClose={() => setSelectedProject(null)}
+              />
+            )}
+          </AnimatePresence>
+        </>
+      )}
+    </main>
   );
 }
