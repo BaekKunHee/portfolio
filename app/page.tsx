@@ -13,8 +13,19 @@ export default function Home() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
 
+  const [dots, setDots] = useState("");
+
+  useEffect(() => {
+    if (!loading) return;
+    const interval = setInterval(() => {
+      setDots((prev) => (prev.length >= 3 ? "" : prev + "."));
+    }, 500);
+    return () => clearInterval(interval);
+  }, [loading]);
+
   useEffect(() => {
     const fetchPortfolioItems = async () => {
+      const startTime = Date.now();
       try {
         const response = await fetch("/api/notion");
         const data = await response.json();
@@ -30,7 +41,9 @@ export default function Home() {
       } catch (error) {
         console.error("Failed to fetch portfolio items:", error);
       } finally {
-        setLoading(false);
+        const elapsedTime = Date.now() - startTime;
+        const remainingTime = Math.max(0, 2000 - elapsedTime);
+        setTimeout(() => setLoading(false), remainingTime);
       }
     };
 
@@ -40,15 +53,15 @@ export default function Home() {
   return (
     <main className="relative w-full min-h-screen bg-transparent text-white pointer-events-none">
       {loading ? (
-        <div className="absolute inset-0 flex items-center justify-center z-50">
-          <div className="text-2xl font-light tracking-widest animate-pulse">
-            CONNECTING THE DOTS...
+        <div className="absolute inset-0 flex items-center justify-center z-50 bg-black">
+          <div className="text-2xl font-light tracking-widest">
+            CONNECTING THE DOTS{dots}
           </div>
         </div>
       ) : (
         <>
           <div className="absolute top-8 left-8 z-10 pointer-events-none">
-            <h1 className="text-4xl font-bold tracking-tighter">HAN</h1>
+            <h1 className="text-4xl font-bold tracking-tighter">Han Baek</h1>
             <p className="text-sm text-gray-400 mt-2 tracking-widest">
               PRODUCT HACKER
             </p>
