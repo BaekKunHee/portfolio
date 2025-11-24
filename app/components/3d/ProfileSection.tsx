@@ -3,6 +3,17 @@ import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
 
+const gridPoints: number[] = [];
+const size = 10;
+const step = 1;
+for (let x = -size; x <= size; x += step) {
+  for (let y = -size; y <= size; y += step) {
+    if (Math.abs(x) + Math.abs(y) > 5) continue;
+    gridPoints.push(x, y, -5);
+  }
+}
+const positions = new Float32Array(gridPoints);
+
 export default function ProfileSection() {
   const scroll = useScroll();
   const groupRef = useRef<THREE.Group>(null);
@@ -19,28 +30,11 @@ export default function ProfileSection() {
     }
   });
 
-  // Create a grid of points
-  const gridPoints = [];
-  const size = 10;
-  const step = 1;
-  for (let x = -size; x <= size; x += step) {
-    for (let y = -size; y <= size; y += step) {
-      if (Math.abs(x) + Math.abs(y) > 5) continue; // Create a diamond shape hole in middle
-      gridPoints.push(x, y, -5);
-    }
-  }
-  const positions = new Float32Array(gridPoints);
-
   return (
     <group ref={groupRef} position={[0, 0, 0]}>
       <points>
         <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            count={positions.length / 3}
-            array={positions}
-            itemSize={3}
-          />
+          <bufferAttribute attach="attributes-position" args={[positions, 3]} />
         </bufferGeometry>
         <pointsMaterial size={0.05} color="#4444ff" transparent opacity={0.4} />
       </points>

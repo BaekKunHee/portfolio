@@ -1,4 +1,4 @@
-import { Text, useScroll, Line } from "@react-three/drei";
+import { Text, useScroll } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";

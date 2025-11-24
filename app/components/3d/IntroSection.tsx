@@ -34,12 +34,7 @@ export default function IntroSection() {
     <group ref={groupRef}>
       <points>
         <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            count={particles.length / 3}
-            array={particles}
-            itemSize={3}
-          />
+          <bufferAttribute attach="attributes-position" args={[particles, 3]} />
         </bufferGeometry>
         <pointsMaterial
           size={0.1}
@@ -69,7 +64,7 @@ export default function IntroSection() {
           anchorX="center"
           anchorY="middle"
         >
-          Han's Journey
+          Han&apos;s Journey
         </Text>
         <Text
           position={[0, -2.5, 0]}
