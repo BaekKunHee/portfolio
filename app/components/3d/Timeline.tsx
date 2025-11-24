@@ -20,9 +20,9 @@ export default function Timeline({ items, onSelect }: TimelineProps) {
     // Move the camera or the group based on scroll
     // For this concept, we'll move the group towards the camera to simulate travel
     if (groupRef.current) {
-      // Timeline visible range: 2/7 to 5/7 (3 pages)
-      const start = 2 / 7;
-      const duration = 3 / 7;
+      // Timeline visible range: 3/12 to 6/12 (3 pages)
+      const start = 3 / 12;
+      const duration = 3 / 12;
       const visible = scroll.visible(start, duration);
       groupRef.current.visible = visible;
 

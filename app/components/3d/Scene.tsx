@@ -27,7 +27,7 @@ export default function Scene({ portfolioItems, onProjectSelect }: SceneProps) {
         <directionalLight position={[0, 0, 5]} intensity={1} />
 
         <Suspense fallback={null}>
-          <ScrollControls pages={7} damping={0.3}>
+          <ScrollControls pages={12} damping={0.3}>
             <StarField />
             <IntroSection />
             <ProfileSection />

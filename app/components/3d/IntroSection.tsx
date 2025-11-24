@@ -19,12 +19,12 @@ export default function IntroSection() {
 
   useFrame(() => {
     if (groupRef.current) {
-      // Visible for first page (0 to 1/7)
-      const visible = scroll.visible(0, 1 / 7);
+      // Visible for first page (0 to 1.5/12)
+      const visible = scroll.visible(0, 1.5 / 12);
       groupRef.current.visible = visible;
 
       // Fade out animation
-      const progress = scroll.range(0, 1 / 7);
+      const progress = scroll.range(0, 1.5 / 12);
       groupRef.current.position.y = progress * 5; // Float up
       groupRef.current.rotation.y += 0.001;
     }

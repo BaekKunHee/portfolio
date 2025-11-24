@@ -1,138 +1,77 @@
-import { Text, useScroll } from "@react-three/drei";
+import { Text, useScroll, Image, Billboard } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { useRef } from "react";
+import { useRef, useMemo } from "react";
 import * as THREE from "three";
+import { skillSets, SkillItem } from "../../data/aboutData";
 
-const SKILL_CLUSTERS = [
-  {
-    name: "Cloud",
-    color: "#ff9900",
-    position: [-4, 2, 0],
-    skills: ["AWS", "EKS", "OpenSearch", "Lambda"],
-  },
-  {
-    name: "DevOps",
-    color: "#0088ff",
-    position: [4, 2, 0],
-    skills: ["Kubernetes", "ArgoCD", "Docker", "Terraform"],
-  },
-  {
-    name: "Development",
-    color: "#00ff88",
-    position: [-4, -2, 0],
-    skills: ["React", "Python", "Flutter", "TypeScript"],
-  },
-  {
-    name: "Tools",
-    color: "#aa00ff",
-    position: [4, -2, 0],
-    skills: ["n8n", "Prometheus", "Grafana", "Git"],
-  },
-];
+const ORBIT_SPEED_MULTIPLIER = 0.2;
 
-function OrbitingPlanet({
+function SkillPlanet({
   skill,
   index,
   total,
-  speed,
   radius,
-  color,
+  speed,
+  iconPath,
 }: {
-  skill: string;
+  skill: SkillItem;
   index: number;
   total: number;
-  speed: number;
   radius: number;
-  color: string;
+  speed: number;
+  iconPath: string;
 }) {
   const ref = useRef<THREE.Group>(null);
 
   useFrame(({ clock }) => {
     if (ref.current) {
-      const angle = (index / total) * Math.PI * 2 + clock.elapsedTime * speed;
+      const angle =
+        (index / total) * Math.PI * 2 +
+        clock.elapsedTime * speed * ORBIT_SPEED_MULTIPLIER;
       ref.current.position.x = Math.cos(angle) * radius;
-      ref.current.position.y = Math.sin(angle) * radius;
+      ref.current.position.z = Math.sin(angle) * radius;
     }
   });
 
   return (
     <group ref={ref}>
-      <mesh>
-        <sphereGeometry args={[0.3, 32, 32]} />
-        <meshStandardMaterial
-          color="#eeeeee"
-          emissive={color}
-          emissiveIntensity={0.2}
-        />
-      </mesh>
-      <Text
-        position={[0, 0.6, 0]}
-        fontSize={0.3}
-        color="white"
-        outlineWidth={0.02}
-        outlineColor="black"
-      >
-        {skill}
-      </Text>
+      <Billboard>
+        <Image url={iconPath} transparent scale={0.8} toneMapped={false} />
+        <Text
+          position={[0, -0.6, 0]}
+          fontSize={0.4}
+          color="white"
+          outlineWidth={0.04}
+          outlineColor="black"
+          anchorY="top"
+          font="/assets/fonts/SpoqaHanSansNeo-Bold.woff"
+        >
+          {skill.label}
+        </Text>
+      </Billboard>
     </group>
   );
 }
 
-function SolarSystem({
-  cluster,
-  index,
+function OrbitRing({
+  radius,
+  color = "#ffffff",
+  opacity = 0.3,
 }: {
-  cluster: (typeof SKILL_CLUSTERS)[0];
-  index: number;
+  radius: number;
+  color?: string;
+  opacity?: number;
 }) {
   return (
-    <group position={new THREE.Vector3(...cluster.position)}>
-      {/* Sun (Cluster Center) */}
-      <mesh>
-        <sphereGeometry args={[0.8, 32, 32]} />
-        <meshStandardMaterial
-          color={cluster.color}
-          emissive={cluster.color}
-          emissiveIntensity={2}
-          toneMapped={false}
-        />
-      </mesh>
-      <pointLight color={cluster.color} intensity={2} distance={5} decay={2} />
-
-      <Text
-        position={[0, 0, 1]}
-        fontSize={0.5}
-        color="white"
-        outlineWidth={0.04}
-        outlineColor="black"
-      >
-        {cluster.name}
-      </Text>
-
-      {/* Orbit Path (Visual Ring) */}
-      <mesh rotation={[0, 0, 0]}>
-        <ringGeometry args={[2.4, 2.5, 64]} />
-        <meshBasicMaterial
-          color={cluster.color}
-          transparent
-          opacity={0.2}
-          side={THREE.DoubleSide}
-        />
-      </mesh>
-
-      {/* Planets */}
-      {cluster.skills.map((skill, j) => (
-        <OrbitingPlanet
-          key={skill}
-          skill={skill}
-          index={j}
-          total={cluster.skills.length}
-          speed={0.3 + (index % 2) * 0.1} // Vary speed slightly
-          radius={2.45}
-          color={cluster.color}
-        />
-      ))}
-    </group>
+    <mesh rotation={[-Math.PI / 2, 0, 0]}>
+      <ringGeometry args={[radius - 0.05, radius + 0.05, 128]} />
+      <meshBasicMaterial
+        color={color}
+        transparent
+        opacity={opacity}
+        side={THREE.DoubleSide}
+      />
+    </mesh>
   );
 }
 
@@ -140,38 +79,116 @@ export default function SkillSection() {
   const scroll = useScroll();
   const groupRef = useRef<THREE.Group>(null);
 
+  // Flatten and categorize skills for orbits
+  // Orbit 1: Stack (Radius 3)
+  // Orbit 2: Infra (Radius 5)
+  // Orbit 3: Tools (Radius 7)
+  // Orbit 4: Soft Skills (Radius 9)
+
+  const orbits = useMemo(
+    () => [
+      {
+        name: "Stack",
+        data: skillSets.stack,
+        radius: 3,
+        speed: 0.5,
+        color: "#61dafb",
+      },
+      {
+        name: "Infra",
+        data: skillSets.infra,
+        radius: 5,
+        speed: 0.3,
+        color: "#ff9900",
+      },
+      {
+        name: "Tools",
+        data: skillSets.tools,
+        radius: 7,
+        speed: 0.2,
+        color: "#aa00ff",
+      },
+      {
+        name: "Soft Skills",
+        data: skillSets.softSkills,
+        radius: 9,
+        speed: 0.15,
+        color: "#00ff88",
+      },
+    ],
+    []
+  );
+
   useFrame((state) => {
     if (groupRef.current) {
-      // Visible page (5/7 to 6/7)
-      const visible = scroll.visible(5 / 7, 1 / 7);
+      // Visible page (6/12 to 10/12) - 4 pages
+      const visible = scroll.visible(6 / 12, 4 / 12);
       groupRef.current.visible = visible;
 
-      // Gentle rotation of clusters
-      groupRef.current.rotation.z =
-        Math.sin(state.clock.elapsedTime * 0.1) * 0.05;
+      // Transition effect
+      const progress = scroll.range(6 / 12, 4 / 12);
+      // Tilt the whole system slightly for better view
+      groupRef.current.rotation.x =
+        0.5 + Math.sin(state.clock.elapsedTime * 0.1) * 0.1;
+      groupRef.current.rotation.y =
+        Math.sin(state.clock.elapsedTime * 0.05) * 0.1;
 
-      // Bring closer
-      const progress = scroll.range(5 / 7, 1 / 7);
-      groupRef.current.position.z = -2 + progress * 2; // Closer range
+      // Zoom in/out based on scroll
+      // Start closer (-5) so it's immediately visible, then zoom in slightly to -2
+      groupRef.current.position.z = -5 + progress * 3;
+      // Keep Y relatively stable or slight movement
+      groupRef.current.position.y = -1 + progress * 1;
     }
   });
 
-  return (
-    <group ref={groupRef} position={[0, 0, -5]}>
-      <Text
-        position={[0, 4.5, 0]}
-        fontSize={0.8}
-        color="#ffffff"
-        anchorX="center"
-        anchorY="middle"
-        outlineWidth={0.02}
-        outlineColor="#000000"
-      >
-        Skill Universe
-      </Text>
+  const getIconPath = (iconName: string) => {
+    if (iconName.startsWith("/")) return iconName;
+    return `/assets/icons/${iconName}`;
+  };
 
-      {SKILL_CLUSTERS.map((cluster, i) => (
-        <SolarSystem key={cluster.name} cluster={cluster} index={i} />
+  return (
+    <group ref={groupRef} position={[0, 0, -10]}>
+      {/* Central Sun / Title */}
+      <mesh>
+        <sphereGeometry args={[1.5, 32, 32]} />
+        <meshStandardMaterial
+          color="#ffd700"
+          emissive="#ff8800"
+          emissiveIntensity={2}
+          toneMapped={false}
+        />
+      </mesh>
+      <pointLight color="#ff8800" intensity={3} distance={20} decay={2} />
+
+      <Billboard>
+        <Text
+          position={[0, 0, 1.6]}
+          fontSize={0.6}
+          color="white"
+          outlineWidth={0.05}
+          outlineColor="black"
+          font="/assets/fonts/SpoqaHanSansNeo-Bold.woff"
+        >
+          SKILLS
+        </Text>
+      </Billboard>
+
+      {/* Orbits and Planets */}
+      {orbits.map((orbit, i) => (
+        <group key={orbit.name}>
+          <OrbitRing radius={orbit.radius} color={orbit.color} />
+          {orbit.data.map((skill, j) => (
+            <SkillPlanet
+              key={skill.label}
+              skill={skill}
+              index={j}
+              total={orbit.data.length}
+              radius={orbit.radius}
+              speed={orbit.speed * (i % 2 === 0 ? 1 : -1)} // Alternate direction
+              iconPath={getIconPath(skill.icon)}
+            />
+          ))}
+        </group>
       ))}
     </group>
   );
