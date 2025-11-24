@@ -63,7 +63,7 @@ export default function Home() {
           <div className="absolute top-8 left-8 z-10 pointer-events-none">
             <h1 className="text-4xl font-bold tracking-tighter">Han Baek</h1>
             <p className="text-sm text-gray-400 mt-2 tracking-widest">
-              PRODUCT HACKER
+              Problem Solver
             </p>
           </div>
 

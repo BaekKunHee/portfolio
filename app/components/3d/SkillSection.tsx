@@ -160,7 +160,7 @@ export default function SkillSection() {
     <group ref={groupRef} position={[0, 0, -5]}>
       <Text
         position={[0, 4.5, 0]}
-        fontSize={1.2}
+        fontSize={0.8}
         color="#ffffff"
         anchorX="center"
         anchorY="middle"
