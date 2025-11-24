@@ -9,12 +9,12 @@ export default function ProfileSection() {
 
   useFrame(() => {
     if (groupRef.current) {
-      // Visible between scroll 1/6 and 2/6
-      const visible = scroll.visible(1 / 6, 1 / 6);
+      // Visible between scroll 1/7 and 2/7
+      const visible = scroll.visible(1 / 7, 1 / 7);
       groupRef.current.visible = visible;
 
       // Fly through effect
-      const progress = scroll.range(1 / 6, 1 / 6);
+      const progress = scroll.range(1 / 7, 1 / 7);
       groupRef.current.position.z = progress * 10; // Move towards camera
     }
   });

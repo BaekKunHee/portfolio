@@ -1,6 +1,6 @@
 import { Text, useScroll, Line } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { useRef, useMemo } from "react";
+import { useRef } from "react";
 import * as THREE from "three";
 
 const SKILL_CLUSTERS = [
@@ -30,14 +30,120 @@ const SKILL_CLUSTERS = [
   },
 ];
 
+function OrbitingPlanet({
+  skill,
+  index,
+  total,
+  speed,
+  radius,
+  color,
+}: {
+  skill: string;
+  index: number;
+  total: number;
+  speed: number;
+  radius: number;
+  color: string;
+}) {
+  const ref = useRef<THREE.Group>(null);
+
+  useFrame(({ clock }) => {
+    if (ref.current) {
+      const angle = (index / total) * Math.PI * 2 + clock.elapsedTime * speed;
+      ref.current.position.x = Math.cos(angle) * radius;
+      ref.current.position.y = Math.sin(angle) * radius;
+    }
+  });
+
+  return (
+    <group ref={ref}>
+      <mesh>
+        <sphereGeometry args={[0.3, 32, 32]} />
+        <meshStandardMaterial
+          color="#eeeeee"
+          emissive={color}
+          emissiveIntensity={0.2}
+        />
+      </mesh>
+      <Text
+        position={[0, 0.6, 0]}
+        fontSize={0.3}
+        color="white"
+        outlineWidth={0.02}
+        outlineColor="black"
+      >
+        {skill}
+      </Text>
+    </group>
+  );
+}
+
+function SolarSystem({
+  cluster,
+  index,
+}: {
+  cluster: (typeof SKILL_CLUSTERS)[0];
+  index: number;
+}) {
+  return (
+    <group position={new THREE.Vector3(...cluster.position)}>
+      {/* Sun (Cluster Center) */}
+      <mesh>
+        <sphereGeometry args={[0.8, 32, 32]} />
+        <meshStandardMaterial
+          color={cluster.color}
+          emissive={cluster.color}
+          emissiveIntensity={2}
+          toneMapped={false}
+        />
+      </mesh>
+      <pointLight color={cluster.color} intensity={2} distance={5} decay={2} />
+
+      <Text
+        position={[0, 0, 1]}
+        fontSize={0.5}
+        color="white"
+        outlineWidth={0.04}
+        outlineColor="black"
+      >
+        {cluster.name}
+      </Text>
+
+      {/* Orbit Path (Visual Ring) */}
+      <mesh rotation={[0, 0, 0]}>
+        <ringGeometry args={[2.4, 2.5, 64]} />
+        <meshBasicMaterial
+          color={cluster.color}
+          transparent
+          opacity={0.2}
+          side={THREE.DoubleSide}
+        />
+      </mesh>
+
+      {/* Planets */}
+      {cluster.skills.map((skill, j) => (
+        <OrbitingPlanet
+          key={skill}
+          skill={skill}
+          index={j}
+          total={cluster.skills.length}
+          speed={0.3 + (index % 2) * 0.1} // Vary speed slightly
+          radius={2.45}
+          color={cluster.color}
+        />
+      ))}
+    </group>
+  );
+}
+
 export default function SkillSection() {
   const scroll = useScroll();
   const groupRef = useRef<THREE.Group>(null);
 
   useFrame((state) => {
     if (groupRef.current) {
-      // Visible last page (5/6 to 6/6)
-      const visible = scroll.visible(5 / 6, 1 / 6);
+      // Visible page (5/7 to 6/7)
+      const visible = scroll.visible(5 / 7, 1 / 7);
       groupRef.current.visible = visible;
 
       // Gentle rotation of clusters
@@ -45,7 +151,7 @@ export default function SkillSection() {
         Math.sin(state.clock.elapsedTime * 0.1) * 0.05;
 
       // Bring closer
-      const progress = scroll.range(5 / 6, 1 / 6);
+      const progress = scroll.range(5 / 7, 1 / 7);
       groupRef.current.position.z = -2 + progress * 2; // Closer range
     }
   });
@@ -61,74 +167,11 @@ export default function SkillSection() {
         outlineWidth={0.02}
         outlineColor="#000000"
       >
-        Skill Network
+        Skill Universe
       </Text>
 
       {SKILL_CLUSTERS.map((cluster, i) => (
-        <group
-          key={cluster.name}
-          position={new THREE.Vector3(...cluster.position)}
-        >
-          {/* Cluster Center */}
-          <mesh>
-            <sphereGeometry args={[0.6, 32, 32]} />
-            <meshStandardMaterial
-              color={cluster.color}
-              emissive={cluster.color}
-              emissiveIntensity={0.8}
-            />
-          </mesh>
-          <Text
-            position={[0, 1, 0]}
-            fontSize={0.5}
-            color={cluster.color}
-            outlineWidth={0.01}
-            outlineColor="black"
-          >
-            {cluster.name}
-          </Text>
-
-          {/* Satellite Skills */}
-          {cluster.skills.map((skill, j) => {
-            const angle = (j / cluster.skills.length) * Math.PI * 2;
-            const radius = 2.2; // Increased radius
-            const x = Math.cos(angle) * radius;
-            const y = Math.sin(angle) * radius;
-
-            return (
-              <group key={skill} position={[x, y, 0]}>
-                <mesh>
-                  <sphereGeometry args={[0.25, 16, 16]} />
-                  <meshStandardMaterial
-                    color="#eeeeee"
-                    emissive="#ffffff"
-                    emissiveIntensity={0.2}
-                  />
-                </mesh>
-                <Text
-                  position={[0, 0.5, 0]}
-                  fontSize={0.3}
-                  color="white"
-                  outlineWidth={0.01}
-                  outlineColor="black"
-                >
-                  {skill}
-                </Text>
-                {/* Connection Line */}
-                <Line
-                  points={[
-                    [0, 0, 0],
-                    [-x, -y, 0],
-                  ]}
-                  color={cluster.color}
-                  lineWidth={2}
-                  transparent
-                  opacity={0.4}
-                />
-              </group>
-            );
-          })}
-        </group>
+        <SolarSystem key={cluster.name} cluster={cluster} index={i} />
       ))}
     </group>
   );
