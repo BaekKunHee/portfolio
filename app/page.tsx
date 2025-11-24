@@ -5,6 +5,7 @@ import { AnimatePresence } from "framer-motion";
 import dynamic from "next/dynamic";
 import ProjectModal from "./components/portfolio/ProjectModal";
 import { Project } from "./types/portfolio";
+import ConnectingDotsLoader from "./components/ConnectingDotsLoader";
 
 const Scene = dynamic(() => import("./components/3d/Scene"), { ssr: false });
 
@@ -54,9 +55,7 @@ export default function Home() {
     <main className="relative w-full min-h-screen bg-transparent text-white pointer-events-none">
       {loading ? (
         <div className="absolute inset-0 flex items-center justify-center z-50 bg-black">
-          <div className="text-2xl font-light tracking-widest">
-            CONNECTING THE DOTS{dots}
-          </div>
+          <ConnectingDotsLoader />
         </div>
       ) : (
         <>
