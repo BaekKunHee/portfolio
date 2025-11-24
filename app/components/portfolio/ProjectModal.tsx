@@ -1,8 +1,8 @@
-import { NotionContent, Project } from '@/app/types/portfolio';
-import { motion } from 'framer-motion';
-import Image from 'next/image';
-import { useEffect, useState } from 'react';
-import NotionRenderer from './NotionRenderer';
+import { NotionContent, Project } from "@/app/types/portfolio";
+import { motion } from "framer-motion";
+import Image from "next/image";
+import { useEffect, useState } from "react";
+import NotionRenderer from "./NotionRenderer";
 
 interface ProjectModalProps {
   project: Project;
@@ -22,10 +22,10 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
           `/api/notion/blocks/children?blockId=${blockId}`
         );
         const data = await response.json();
-        console.log('Children blocks:', data);
+        console.log("Children blocks:", data);
         return data.blocks;
       } catch (error) {
-        console.error('Failed to fetch block children:', error);
+        console.error("Failed to fetch block children:", error);
         return [];
       }
     };
@@ -37,13 +37,13 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
           `/api/notion/page?pageId=${project.notionPageId}`
         );
         const data = await response.json();
-        console.log('Initial blocks:', data);
+        console.log("Initial blocks:", data);
 
         // 최상위 블록에 대해서만 children을 가져옴 (API에서 이미 재귀적으로 처리)
         const blocksWithChildren = await Promise.all(
           data.blocks.map(async (block: any) => {
             if (block.has_children) {
-              console.log('Fetching children for block:', block.id);
+              console.log("Fetching children for block:", block.id);
               const children = await fetchBlockChildren(block.id);
               return { ...block, children };
             }
@@ -51,10 +51,10 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
           })
         );
 
-        console.log('Blocks with children:', blocksWithChildren);
+        console.log("Blocks with children:", blocksWithChildren);
         setNotionContent({ blocks: blocksWithChildren });
       } catch (error) {
-        console.error('Failed to fetch notion content:', error);
+        console.error("Failed to fetch notion content:", error);
         setNotionContent(null);
       } finally {
         setLoading(false);
@@ -71,13 +71,13 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="fixed inset-0 bg-black/60 z-50"
+        className="fixed inset-0 bg-black/60 z-50 pointer-events-auto"
       />
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: 20 }}
-        className="fixed md:inset-10 inset-0 bg-[#2A2A2A] z-50 rounded-lg overflow-hidden"
+        className="fixed md:inset-10 inset-0 bg-[#2A2A2A] z-50 rounded-lg overflow-hidden pointer-events-auto"
       >
         <div className="sticky top-0 z-10 bg-[#2A2A2A] border-b border-gray-700">
           <button
@@ -157,7 +157,7 @@ const ProjectModal = ({ project, onClose }: ProjectModalProps) => {
                   <a
                     href={`https://notion.so/${project.notionPageId.replace(
                       /-/g,
-                      ''
+                      ""
                     )}`}
                     target="_blank"
                     rel="noopener noreferrer"

@@ -53,7 +53,7 @@ export default function ProfileSection() {
           anchorX="center"
           anchorY="middle"
         >
-          Infrastructure is about
+          Life is about
         </Text>
         <Text
           position={[0, 1.5, 0]}
@@ -75,8 +75,7 @@ export default function ProfileSection() {
           anchorX="center"
           anchorY="top"
         >
-          Just as stars form constellations, individual systems connect to form
-          powerful infrastructure.
+          Every moment of the past connects to form who I am today.
         </Text>
 
         <Text
@@ -88,8 +87,8 @@ export default function ProfileSection() {
           anchorX="center"
           anchorY="top"
         >
-          I build the invisible lines that make software reliable, scalable, and
-          efficient.
+          I believe in the power of consistency and the value of every
+          experience.
         </Text>
       </group>
     </group>
