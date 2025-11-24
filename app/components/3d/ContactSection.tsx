@@ -1,5 +1,5 @@
 import { Text, useScroll, Image, Billboard, Outlines } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
 import { learnMoreItems } from "../../data/aboutData";
@@ -18,6 +18,9 @@ function ContactPlanet({
   speed: number;
 }) {
   const ref = useRef<THREE.Group>(null);
+
+  const { width } = useThree((state) => state.viewport);
+  const isMobile = width < 10;
 
   useFrame(({ clock }) => {
     if (ref.current) {
@@ -40,10 +43,15 @@ function ContactPlanet({
           onPointerOut={() => (document.body.style.cursor = "auto")}
         >
           {/* eslint-disable-next-line jsx-a11y/alt-text */}
-          <Image url={item.icon} transparent scale={1.2} toneMapped={false} />
+          <Image
+            url={item.icon}
+            transparent
+            scale={isMobile ? 0.8 : 1.2}
+            toneMapped={false}
+          />
           <Text
             position={[0, -0.8, 0]}
-            fontSize={0.3}
+            fontSize={isMobile ? 0.2 : 0.3}
             color="white"
             outlineWidth={0.02}
             outlineColor="black"
@@ -83,6 +91,8 @@ function OrbitRing({
 export default function ContactSection() {
   const scroll = useScroll();
   const groupRef = useRef<THREE.Group>(null);
+  const { width } = useThree((state) => state.viewport);
+  const isMobile = width < 10;
 
   useFrame((state) => {
     if (groupRef.current) {
@@ -109,7 +119,7 @@ export default function ContactSection() {
         onPointerOver={() => (document.body.style.cursor = "pointer")}
         onPointerOut={() => (document.body.style.cursor = "auto")}
       >
-        <sphereGeometry args={[2, 32, 32]} />
+        <sphereGeometry args={[isMobile ? 1.2 : 2, 32, 32]} />
         <meshStandardMaterial
           color="black"
           emissive="black"
@@ -123,7 +133,7 @@ export default function ContactSection() {
       <Billboard>
         <Text
           position={[0, 0, 2.2]}
-          fontSize={0.4}
+          fontSize={isMobile ? 0.3 : 0.4}
           color="white"
           font="/assets/fonts/SpoqaHanSansNeo-Bold.woff"
         >
@@ -131,8 +141,8 @@ export default function ContactSection() {
         </Text>
         <Text
           position={[0, -0.6, 2.2]}
-          fontSize={0.3}
-          color="#ccffdd"
+          fontSize={isMobile ? 0.3 : 0.4}
+          color="white"
           outlineWidth={0.02}
           outlineColor="black"
           font="/assets/fonts/SpoqaHanSansNeo-Bold.woff"
@@ -142,7 +152,7 @@ export default function ContactSection() {
       </Billboard>
 
       {/* Orbit and Planets */}
-      <OrbitRing radius={6} color="#00ff88" opacity={0.2} />
+      <OrbitRing radius={isMobile ? 3.5 : 6} color="#00ff88" opacity={0.2} />
 
       {learnMoreItems.map((item, i) => (
         <ContactPlanet
@@ -150,7 +160,7 @@ export default function ContactSection() {
           item={item}
           index={i}
           total={learnMoreItems.length}
-          radius={6}
+          radius={isMobile ? 3.5 : 6}
           speed={0.3}
         />
       ))}

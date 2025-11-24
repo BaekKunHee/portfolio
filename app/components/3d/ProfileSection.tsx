@@ -1,5 +1,5 @@
 import { Text, useScroll } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
 
@@ -16,6 +16,9 @@ const positions = new Float32Array(gridPoints);
 
 export default function ProfileSection() {
   const scroll = useScroll();
+  const { width } = useThree((state) => state.viewport);
+  const isMobile = width < 10;
+
   const groupRef = useRef<THREE.Group>(null);
 
   useFrame(() => {
@@ -42,7 +45,7 @@ export default function ProfileSection() {
       <group position={[0, 0, 0]}>
         <Text
           position={[0, 2.5, 0]}
-          fontSize={0.6}
+          fontSize={isMobile ? 0.25 : 0.6}
           color="#00ff88"
           anchorX="center"
           anchorY="middle"
@@ -51,7 +54,7 @@ export default function ProfileSection() {
         </Text>
         <Text
           position={[0, 1.5, 0]}
-          fontSize={1.0}
+          fontSize={isMobile ? 0.4 : 1.0}
           color="white"
           anchorX="center"
           anchorY="middle"
@@ -62,9 +65,9 @@ export default function ProfileSection() {
 
         <Text
           position={[0, -0.5, 0]}
-          fontSize={0.35}
+          fontSize={isMobile ? 0.15 : 0.35}
           color="#cccccc"
-          maxWidth={6}
+          maxWidth={isMobile ? 3 : 6}
           textAlign="center"
           anchorX="center"
           anchorY="top"
@@ -74,9 +77,9 @@ export default function ProfileSection() {
 
         <Text
           position={[0, -2.5, 0]}
-          fontSize={0.35}
+          fontSize={isMobile ? 0.15 : 0.35}
           color="#cccccc"
-          maxWidth={6}
+          maxWidth={isMobile ? 3 : 6}
           textAlign="center"
           anchorX="center"
           anchorY="top"

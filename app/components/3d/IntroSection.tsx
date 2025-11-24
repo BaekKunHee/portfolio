@@ -1,10 +1,13 @@
 import { Text, useScroll } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { useRef, useState } from "react";
 import * as THREE from "three";
 
 export default function IntroSection() {
   const scroll = useScroll();
+  const { width } = useThree((state) => state.viewport);
+  const isMobile = width < 10;
+
   const groupRef = useRef<THREE.Group>(null);
   const [particles] = useState(() => {
     const count = 200;
@@ -48,7 +51,7 @@ export default function IntroSection() {
       <group position={[0, 0, 0]}>
         <Text
           position={[0, 1, 0]}
-          fontSize={2}
+          fontSize={isMobile ? 0.6 : 2}
           color="#ffffff"
           anchorX="center"
           anchorY="middle"
@@ -59,7 +62,7 @@ export default function IntroSection() {
         </Text>
         <Text
           position={[0, -0.8, 0]}
-          fontSize={0.8}
+          fontSize={isMobile ? 0.3 : 0.8}
           color="#00ff88"
           anchorX="center"
           anchorY="middle"
@@ -68,7 +71,7 @@ export default function IntroSection() {
         </Text>
         <Text
           position={[0, -2.5, 0]}
-          fontSize={0.4}
+          fontSize={isMobile ? 0.15 : 0.4}
           color="#cccccc"
           anchorX="center"
           anchorY="middle"

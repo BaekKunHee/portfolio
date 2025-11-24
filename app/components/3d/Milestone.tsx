@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { Text } from "@react-three/drei";
 import { Project } from "@/app/types/portfolio";
 import { Mesh } from "three";
@@ -20,6 +20,8 @@ export default function Milestone({
 }: MilestoneProps) {
   const meshRef = useRef<Mesh>(null);
   const [hovered, setHover] = useState(false);
+  const { width } = useThree((state) => state.viewport);
+  const isMobile = width < 10;
 
   useFrame((state, delta) => {
     if (meshRef.current) {
@@ -64,7 +66,7 @@ export default function Milestone({
         onPointerOut={() => setHover(false)}
         scale={hovered ? 1.5 : 1}
       >
-        <dodecahedronGeometry args={[0.5, 0]} />
+        <dodecahedronGeometry args={[isMobile ? 0.3 : 0.5, 0]} />
         <meshStandardMaterial
           color={hovered ? "#ff0055" : "#ffffff"}
           emissive={hovered ? "#ff0055" : "#000000"}
@@ -74,7 +76,7 @@ export default function Milestone({
       </mesh>
       <Text
         position={[0, 1, 0]}
-        fontSize={0.3}
+        fontSize={isMobile ? 0.2 : 0.3}
         color="white"
         anchorX="center"
         anchorY="middle"

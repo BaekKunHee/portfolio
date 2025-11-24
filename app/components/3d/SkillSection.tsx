@@ -1,5 +1,5 @@
 import { Text, useScroll, Image, Billboard } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
+import { useFrame, useThree } from "@react-three/fiber";
 import { useRef, useMemo } from "react";
 import * as THREE from "three";
 import { skillSets, SkillItem } from "../../data/aboutData";
@@ -23,6 +23,9 @@ function SkillPlanet({
 }) {
   const ref = useRef<THREE.Group>(null);
 
+  const { width } = useThree((state) => state.viewport);
+  const isMobile = width < 10;
+
   useFrame(({ clock }) => {
     if (ref.current) {
       const angle =
@@ -37,10 +40,15 @@ function SkillPlanet({
     <group ref={ref}>
       <Billboard>
         {/* eslint-disable-next-line jsx-a11y/alt-text */}
-        <Image url={iconPath} transparent scale={0.8} toneMapped={false} />
+        <Image
+          url={iconPath}
+          transparent
+          scale={isMobile ? 0.5 : 0.8}
+          toneMapped={false}
+        />
         <Text
           position={[0, -0.6, 0]}
-          fontSize={0.4}
+          fontSize={isMobile ? 0.25 : 0.4}
           color="white"
           outlineWidth={0.04}
           outlineColor="black"
@@ -79,6 +87,8 @@ function OrbitRing({
 export default function SkillSection() {
   const scroll = useScroll();
   const groupRef = useRef<THREE.Group>(null);
+  const { width } = useThree((state) => state.viewport);
+  const isMobile = width < 10;
 
   // Flatten and categorize skills for orbits
   // Orbit 1: Stack (Radius 3)
@@ -91,33 +101,33 @@ export default function SkillSection() {
       {
         name: "Stack",
         data: skillSets.stack,
-        radius: 3,
+        radius: isMobile ? 1.8 : 3,
         speed: 0.5,
         color: "#61dafb",
       },
       {
         name: "Infra",
         data: skillSets.infra,
-        radius: 5,
+        radius: isMobile ? 2.8 : 5,
         speed: 0.3,
         color: "#ff9900",
       },
       {
         name: "Tools",
         data: skillSets.tools,
-        radius: 7,
+        radius: isMobile ? 3.8 : 7,
         speed: 0.2,
         color: "#aa00ff",
       },
       {
         name: "Soft Skills",
         data: skillSets.softSkills,
-        radius: 9,
+        radius: isMobile ? 4.8 : 9,
         speed: 0.15,
         color: "#00ff88",
       },
     ],
-    []
+    [isMobile]
   );
 
   useFrame((state) => {
@@ -151,7 +161,7 @@ export default function SkillSection() {
     <group ref={groupRef} position={[0, 0, -10]}>
       {/* Central Sun / Title */}
       <mesh>
-        <sphereGeometry args={[1.5, 32, 32]} />
+        <sphereGeometry args={[isMobile ? 0.8 : 1.5, 32, 32]} />
         <meshStandardMaterial
           color="#ffd700"
           emissive="#ff8800"
@@ -163,8 +173,8 @@ export default function SkillSection() {
 
       <Billboard>
         <Text
-          position={[0, 0, 1.6]}
-          fontSize={0.6}
+          position={[0, 0, isMobile ? 0.9 : 1.6]}
+          fontSize={isMobile ? 0.3 : 0.6}
           color="white"
           outlineWidth={0.05}
           outlineColor="black"
