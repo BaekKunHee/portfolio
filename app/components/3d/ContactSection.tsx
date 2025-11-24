@@ -1,4 +1,4 @@
-import { Text, useScroll, Image, Billboard } from "@react-three/drei";
+import { Text, useScroll, Image, Billboard, Outlines } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 import { useRef } from "react";
 import * as THREE from "three";
@@ -39,6 +39,7 @@ function ContactPlanet({
           onPointerOver={() => (document.body.style.cursor = "pointer")}
           onPointerOut={() => (document.body.style.cursor = "auto")}
         >
+          {/* eslint-disable-next-line jsx-a11y/alt-text */}
           <Image url={item.icon} transparent scale={1.2} toneMapped={false} />
           <Text
             position={[0, -0.8, 0]}
@@ -115,6 +116,7 @@ export default function ContactSection() {
           emissiveIntensity={2}
           toneMapped={false}
         />
+        <Outlines thickness={0.05} color="white" />
       </mesh>
       <pointLight color="black" intensity={3} distance={20} decay={2} />
 

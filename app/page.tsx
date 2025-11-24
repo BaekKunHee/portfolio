@@ -14,16 +14,6 @@ export default function Home() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const [dots, setDots] = useState("");
-
-  useEffect(() => {
-    if (!loading) return;
-    const interval = setInterval(() => {
-      setDots((prev) => (prev.length >= 3 ? "" : prev + "."));
-    }, 500);
-    return () => clearInterval(interval);
-  }, [loading]);
-
   useEffect(() => {
     const fetchPortfolioItems = async () => {
       const startTime = Date.now();

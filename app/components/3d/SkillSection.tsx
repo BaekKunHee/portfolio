@@ -36,6 +36,7 @@ function SkillPlanet({
   return (
     <group ref={ref}>
       <Billboard>
+        {/* eslint-disable-next-line jsx-a11y/alt-text */}
         <Image url={iconPath} transparent scale={0.8} toneMapped={false} />
         <Text
           position={[0, -0.6, 0]}
